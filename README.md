@@ -101,7 +101,13 @@ Database create command
 ```php
 Artisan::command('migrate:database', function () {
     extract(config('database.connections')[config('database.default')]);
-    $pdo = new \PDO("{$driver}:host={$host}", $username, $password);
-    $pdo->query("CREATE DATABASE IF NOT EXISTS {$database} CHARACTER SET {$charset} COLLATE  {$collation}");
+    $this->info("creating database: {$database} in {$host}");
+    try {
+        $pdo = new \PDO("{$driver}:host={$host}", $username, $password);
+        $pdo->query("CREATE DATABASE IF NOT EXISTS {$database} CHARACTER SET {$charset} COLLATE  {$collation}");
+        $this->info('created successfully');
+    } catch (Exception $e) {
+        $this->error('failure: ' . $e->getMessage());
+    }
 });
 ```
