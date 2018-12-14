@@ -97,3 +97,11 @@ Artisan::command('model {table}', function ($table) {
     $this->info(getFillableFromTable($table));
 })->describe('Display an Relationships code');
 ```
+Database create command
+```php
+Artisan::command('migrate:database', function () {
+    extract(config('database.connections')[config('database.default')]);
+    $pdo = new \PDO("{$driver}:host={$host}", $username, $password);
+    $pdo->query("CREATE DATABASE IF NOT EXISTS {$database} CHARACTER SET {$charset} COLLATE  {$collation}");
+});
+```
